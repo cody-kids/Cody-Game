@@ -11,64 +11,76 @@
        android:id="@+id/gridLayout"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_centerInParent="true">
+       android:layout_alignParentTop="true"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="50dp">
 
    </GridLayout>
 
-   <Button
-       android:id="@+id/left"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentStart="true"
-       android:layout_alignParentBottom="true"
-       android:layout_marginStart="34dp"
-       android:layout_marginBottom="73dp"
-       android:text="left" />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="280sp"
+       android:orientation="horizontal"
+       android:layout_alignParentBottom="true">
 
-   <Button
-       android:id="@+id/up"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentBottom="true"
-       android:layout_centerHorizontal="true"
-       android:layout_marginBottom="112dp"
-       android:text="up" />
+      <LinearLayout
+          android:id="@+id/dragLayout"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          tools:ignore="Suspicious0dp"
+          android:layout_weight="1"
+          android:orientation="vertical"
+          android:background="@color/colorPrimaryDark">
 
-   <Button
-       android:id="@+id/right"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentEnd="true"
-       android:layout_alignParentBottom="true"
-       android:layout_marginEnd="44dp"
-       android:layout_marginBottom="67dp"
-       android:text="right" />
+         <ImageView
+             android:id="@+id/upDirection"
+             android:layout_width="60dp"
+             android:layout_height="60dp"
+             android:src="@mipmap/up_arrow"
+             android:padding="8dp"/>
 
-   <Button
-       android:id="@+id/down"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentBottom="true"
-       android:layout_centerHorizontal="true"
-       android:text="down" />
+         <ImageView
+             android:id="@+id/downDirection"
+             android:layout_width="60dp"
+             android:layout_height="60dp"
+             android:src="@mipmap/down_arrow"
+             android:padding="8dp"/>
 
-   <Button
-       android:id="@+id/rotateLeft"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentStart="true"
-       android:layout_alignParentBottom="true"
-       android:layout_marginStart="34dp"
-       android:layout_marginBottom="13dp"
-       android:text="rotate Left" />
+         <ImageView
+             android:id="@+id/leftDirection"
+             android:layout_width="60dp"
+             android:layout_height="60dp"
+             android:src="@mipmap/left_arrow"
+             android:padding="8dp"/>
 
-   <Button
-       android:id="@+id/rotateRight"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentEnd="true"
-       android:layout_alignParentBottom="true"
-       android:layout_marginEnd="21dp"
-       android:layout_marginBottom="9dp"
-       android:text="rotate Right" />
+         <ImageView
+             android:id="@+id/rightDirection"
+             android:layout_width="60dp"
+             android:layout_height="60dp"
+             android:src="@mipmap/right_arrow"
+             android:padding="8dp"/>
+
+         <Button
+             android:id="@+id/startButton"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:paddingRight="16dp"
+             android:paddingLeft="16dp"
+             android:text="start"
+             android:background="#00BD00" />
+
+      </LinearLayout>
+
+
+      <LinearLayout
+          android:id="@+id/dropLayout"
+          android:layout_width="0dp"
+          android:layout_weight="4"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:background="@color/colorPrimary"/>
+
+
+   </LinearLayout>
+
 </RelativeLayout>
