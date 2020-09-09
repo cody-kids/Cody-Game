@@ -3,8 +3,10 @@ package com.example.dragtest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout dropLayout;
     GridLayout gridLayout;
     boolean flag = true;
-    public int position , row, column, end, pathIndex = 0;
+    public int position , row, column, end, pathIndex = 0,  rotationIndex = 1;
     public int[] size = new int[100];
     public int[] path = new int[100];
 
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             int i = 1, pathIndex = 0, sizeIndex = 0;
 
+
             for(int r = 1; r <= row; r++){
                 for(int c = 1; c <= column; c++ ) {
 
@@ -88,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject pathId = path.getJSONObject(pathIndex);
                     int id = pathId.getInt("id");
                     size[sizeIndex++] = id;
+
+
                     if(pathIndex < 25){
                         if(id == i){
                             imageView.setImageResource(R.mipmap.tile);
@@ -99,12 +104,17 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if(pathIndex == startIndex){
-                        imageView.setImageResource(R.mipmap.player_idle);
+                        imageView.setImageResource(R.mipmap.up);
                     }
+
+                   
+
 
                     imageView.setId(i++);
                     GridLayout.Spec rowSpan = GridLayout.spec(GridLayout.UNDEFINED, 1);
                     GridLayout.Spec colSpan = GridLayout.spec(GridLayout.UNDEFINED, 1);
+
+
 
                     if (r == 0 && c == 0) {
                         Log.e("", "specs");
@@ -113,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams(rowSpan, colSpan);
                     gridLayout.addView(imageView, gridParams);
+
+                    imageView.requestLayout();
+
+                    imageView.getLayoutParams().height = 150;
+                    imageView.getLayoutParams().width = 150;
+
+                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
                 }
             }
 
@@ -121,33 +139,77 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+        final Thread running = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    runIt();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i = 0; i < path.length ; i++){
+                running.start();
+                Toast.makeText(MainActivity.this, "Started", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
-                    switch (path[i]){
+    }
+
+    void runIt() throws InterruptedException {
+        Thread current = Thread.currentThread();
+        for(int i = 0; i < path.length ; i++){
+            switch (path[i]){
+                case 1:
+                    switch(rotationIndex){
                         case 1:
                             goUp();
                             break;
+
                         case -1:
                             goDown();
                             break;
-                        case -2:
-                            goLeft();
-                            break;
+
                         case 2:
                             goRight();
                             break;
+
+                        case -2:
+                            goLeft();
+                            break;
                     }
 
-                    lagMove thread = new lagMove();
-                    thread.run();
+                    current.sleep(500);
+                    break;
 
-                }
+                case -1:
+                    goDown();
+
+                    current.sleep(500);
+
+                    break;
+
+                case -2:
+                    rotateLeft();
+
+                    current.sleep(500);
+
+                    break;
+
+                case 2:
+                    rotateRight();
+
+                    current.sleep(500);
+
+                    break;
             }
-        });
+
+        }
     }
 
     void goUp(){
@@ -172,14 +234,21 @@ public class MainActivity extends AppCompatActivity {
                         player.setImageResource(R.mipmap.tile);
                         position = position - 5;
                         ImageView newPosition = (ImageView) findViewById(position);
-                        newPosition.setImageResource(R.mipmap.player_idle);
+                        newPosition.setImageResource(R.mipmap.up);
+
                         flag = false;
                     }
                     else {
                         player.setImageResource(R.mipmap.tile);
                         position= position -5;
                         if( position == end){
-                            Toast.makeText(getApplicationContext(), "Won", Toast.LENGTH_SHORT).show();
+
+                            this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Won", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
 
                         }
                         ImageView newPosition = (ImageView) findViewById(position);
@@ -216,11 +285,16 @@ public class MainActivity extends AppCompatActivity {
                 player.setImageResource(R.mipmap.tile);
                 position = position + 5;
                 if( position == end){
-                    Toast.makeText(getApplicationContext(), "Won", Toast.LENGTH_SHORT).show();
+                    this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Won", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
                 }
 
                 ImageView newPosition = (ImageView) findViewById(position);
-                newPosition.setImageResource(R.mipmap.player_idle);
+                newPosition.setImageResource(R.mipmap.down);
                 flag = false;
             }
             else {
@@ -257,7 +331,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 ImageView newPosition = (ImageView) findViewById(position);
-                newPosition.setImageResource(R.mipmap.player_idle);
+                newPosition.setImageResource(R.mipmap.right);
+
                 flag = false;
             }
             else {
@@ -291,7 +366,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Won", Toast.LENGTH_SHORT).show();
                 }
                 ImageView newPosition = (ImageView) findViewById(position);
-                newPosition.setImageResource(R.mipmap.player_idle);
+                newPosition.setImageResource(R.mipmap.left);
+
                 flag = false;
             }
             else {
@@ -306,6 +382,58 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Out of Bounds", Toast.LENGTH_SHORT).show();
         }
         Log.e("Position: ", Integer.toString(position));
+    }
+
+    void rotateLeft(){
+        player = (ImageView) findViewById(position);
+
+        switch (rotationIndex){
+            case 1:
+                player.setImageResource(R.mipmap.left);
+                rotationIndex = -2;
+                break;
+
+            case -1:
+                player.setImageResource(R.mipmap.right);
+                rotationIndex = 2;
+                break;
+
+            case 2:
+                player.setImageResource(R.mipmap.up);
+                rotationIndex = 1;
+                break;
+
+            case -2:
+                player.setImageResource(R.mipmap.down);
+                rotationIndex = -1;
+                break;
+        }
+    }
+
+    void rotateRight(){
+        player = (ImageView) findViewById(position);
+
+        switch (rotationIndex){
+            case 1:
+                player.setImageResource(R.mipmap.right);
+                rotationIndex = 2;
+                break;
+
+            case -1:
+                player.setImageResource(R.mipmap.left);
+                rotationIndex = -2;
+                break;
+
+            case 2:
+                player.setImageResource(R.mipmap.down);
+                rotationIndex = -1;
+                break;
+
+            case -2:
+                player.setImageResource(R.mipmap.up);
+                rotationIndex = 1;
+                break;
+        }
     }
 
     public String loadJSONFromAsset() {

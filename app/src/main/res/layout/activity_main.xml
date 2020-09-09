@@ -20,16 +20,16 @@
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="280sp"
-       android:orientation="horizontal"
+       android:orientation="vertical"
        android:layout_alignParentBottom="true">
 
       <LinearLayout
           android:id="@+id/dragLayout"
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
           tools:ignore="Suspicious0dp"
           android:layout_weight="1"
-          android:orientation="vertical"
+          android:orientation="horizontal"
           android:background="@color/colorPrimaryDark">
 
          <ImageView
@@ -64,8 +64,7 @@
              android:id="@+id/startButton"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:paddingRight="16dp"
-             android:paddingLeft="16dp"
+             android:layout_margin="16dp"
              android:text="start"
              android:background="#00BD00" />
 
@@ -74,11 +73,12 @@
 
       <LinearLayout
           android:id="@+id/dropLayout"
-          android:layout_width="0dp"
+          android:layout_width="match_parent"
           android:layout_weight="4"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          android:background="@color/colorPrimary"/>
+          android:layout_height="0dp"
+          android:orientation="horizontal"
+          android:background="@color/colorPrimary"
+          tools:ignore="Suspicious0dp" />
 
 
    </LinearLayout>
