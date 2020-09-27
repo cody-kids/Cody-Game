@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public int position , row, column, end, pathIndex = 0,  rotationIndex = 1 ,startIndex, endIndex;
 
     public int[] size = new int[100];
-
+    // add id here
+    int dropId = 1000;
 
     /*To store the path given by the user*/
     public int[] path = new int[100];
@@ -657,21 +658,28 @@ public class MainActivity extends AppCompatActivity {
         public boolean onDrag(View view, DragEvent dragEvent) {
 
             int event = dragEvent.getAction();
-            int dropId = 1000;
-
+//            I
             switch (event){
                 case DragEvent.ACTION_DRAG_ENTERED :
                     final View v = (View) dragEvent.getLocalState();
                     if(v.getId() == R.id.upDirection){
-                        ImageView image = new ImageView(getApplicationContext());
+                        final ImageView image = new ImageView(getApplicationContext()); // why final? Wait i'll show
                         image.setImageResource(R.mipmap.up_arrow);
-                        image.setId(dropId++);
+                        image.setId(dropId++); //debug
                         dropLayout.addView(image);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80, 80);
                         image.setPadding(16,0 ,0 ,0);
                         image.setLayoutParams(params);
                         path[pathIndex++] = 1;
 
+                        image.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                image.setVisibility(View.GONE);
+                                int position = (image.getId()) - 1000;
+                                path[position] = 0;
+                            }
+                        });
 
                     }
 
@@ -729,6 +737,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-
+   
 }
 
